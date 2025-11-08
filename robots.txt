@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: http://ansinhjsc.com.vn/sitemap.xml
