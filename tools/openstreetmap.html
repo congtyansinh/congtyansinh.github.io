@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Hiển thị vị trí người dùng bằng Leaflet</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+      border-radius: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      background: #0078ff;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>📍 Xác định vị trí của bạn</h2>
+  <button id="getLocationBtn">Lấy vị trí</button>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    let map = L.map('map').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    let marker;
+
+    document.getElementById("getLocationBtn").addEventListener("click", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          console.log("Geolocation", pos.coords);
+          map.setView([lat, lng], 15);
+          if (marker) marker.remove();
+          marker = L.marker([lat, lng]).addTo(map)
+            .bindPopup("📍 Đây là vị trí của bạn").openPopup();
+        }, () => {
+          alert("Không thể lấy vị trí.");
+        }, { enableHighAccuracy: true });
+      } else {
+        alert("Trình duyệt của bạn không hỗ trợ định vị.");
+      }
+    });
+  </script>
+</body>
+</html>
